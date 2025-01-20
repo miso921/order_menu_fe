@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const CurrentMenuPopup = (prop) => {
@@ -12,14 +12,26 @@ const CurrentMenuPopup = (prop) => {
 
     const saveCart = async () => {
         try {
-            const cartResponse =  await axios.post("/api/v1/menu/cart", selectInfo);
-            prop.cart(cartResponse);
+            // selectedOptions에서 opt1, opt2를 하나의 배열로 변환
+            const selectedOpts = [
+                selectInfo.selectedOptions.opt1,
+                selectInfo.selectedOptions.opt2,
+            ].filter(opt => opt !== null);  // null이 아닌 값만 필터링
+
+            // API에 전송할 데이터 구조
+            const cartResponse = await axios.post("/api/v1/menu/cart", {
+                ...selectInfo,
+                selectedOptions: selectedOpts, // opt 배열로 변환된 값만 전송
+                orderNum: sessionStorage.getItem("orderNum") ? sessionStorage.getItem("orderNum") : null
+            });
+
+            sessionStorage.setItem("orderNum", cartResponse.data.data.orderNum)
             console.log(cartResponse)
             prop.closeModal();
         } catch (e) {
             console.warn(e);
         }
-    }
+    };
 
     const toggleOption = (item) => {
         setSelectInfo((prevState) => {

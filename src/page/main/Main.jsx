@@ -7,6 +7,7 @@ import dessertMenu from "./dessertMenu.js";
 import Modal from "react-modal";
 import CurrentMenuPopup from "./CurrentMenuPopup.jsx";
 import menuOption from "./menuOption.js";
+import CartMenuPopup from "./CartMenuPopup.jsx";
 
 const Main = () => {
     const [selectedMenu, setSelectedMenu] = useState("drink");
@@ -44,7 +45,16 @@ const Main = () => {
 
     const [cartItems, setCartItems] = useState({});
 
+    const [orderNum, setOrderNum] = useState(String);
+
     const relatedOptions = optionsByMenu(currentMenuOption);
+
+    const Logo = () => (
+        <div className="flex justify-center items-center mb-1 pt-3">
+            <img className="w-12 h-12 rounded-full border border-r-2 mr-2" src="/logo.png"/>
+            <h1 className="text-black text-4xl font-paperlogy-8ExtraBold">성심성의</h1>
+        </div>
+    );
 
     const closemodal = () => {
         setIsOpen(false);
@@ -68,9 +78,11 @@ const Main = () => {
     return (
         <>
             <div className="container">
-                <h1 className="flex font-paperlogy-8ExtraBold text-black text-4xl pt-10 justify-center">
-                    어서오세요~
-                </h1>
+                {/* 로고 */}
+                <Logo/>
+                {/*<h1 className="flex font-paperlogy-8ExtraBold text-black text-4xl pt-10 justify-center">*/}
+                {/*    성심성의*/}
+                {/*</h1>*/}
 
                 {/* 메뉴바 */}
                 <div className="flex justify-center pt-3">
@@ -123,10 +135,15 @@ const Main = () => {
 
                 <div className="space-y-4 p-5">
                     <button
-                        className={`mr-3 px-4 py-2 rounded-lg shadow-xl  ${
-                            selectedMenu === "dessert" ? "bg-amber-800 text-white" : ""
-                        } hover:bg-amber-800`}
-                        onClick={() => setSelectedMenu("dessert")}
+                        className={`mr-3 px-4 py-2 rounded-lg shadow-xl hover:bg-amber-800`}
+                        onClick={() => {
+                            setIsOpen(!isOpen);
+                            setOrderNum(sessionStorage.getItem("orderNum"))
+                            {isOpen && <CartMenuPopup  // 여기가 문제
+                                orderNum={orderNum}
+                                closeModal={closemodal}
+                            />}
+                        }}
                     >
                         장바구니
                     </button>
@@ -140,6 +157,21 @@ const Main = () => {
                     closeModal={closemodal}
                     cart={setCartItems}
                 />}
+            </Modal>
+
+            <Modal style={modalStyle} isOpen={isOpen} onRequestClose={closemodal} ariaHideApp={false}>
+                {isOpen && (orderNum ?
+                        <CartMenuPopup
+                            orderNum={orderNum}
+                            closeModal={closemodal}
+                        /> :
+                        <CurrentMenuPopup
+                            currentMenuOption={currentMenuOption}
+                            relatedOptions={relatedOptions}
+                            closeModal={closemodal}
+                            cart={setCartItems}
+                        />
+                )}
             </Modal>
         </>
     );
