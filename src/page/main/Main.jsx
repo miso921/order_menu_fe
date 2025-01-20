@@ -14,6 +14,8 @@ const Main = () => {
 
     const [isOpen, setIsOpen] = useState(false);
 
+    const [modalType , setModalType] = useState("");
+
     const [currentMenuOption, setCurrentMenuOption] = useState({
         seq: 0,
         code: "",
@@ -110,6 +112,7 @@ const Main = () => {
                                 className="bg-orange-400 rounded-lg shadow-md hover:shadow-lg overflow-hidden cursor-pointer shadow-xl"
                                 onClick={() => {
                                     setIsOpen(!isOpen);
+                                    setModalType("current")
                                     setCurrentMenuOption(item)
                                     optionsByMenu()
                                 }}
@@ -134,6 +137,7 @@ const Main = () => {
                         className={`mr-3 px-4 py-2 rounded-lg shadow-xl hover:bg-amber-800`}
                         onClick={() => {
                             setIsOpen(!isOpen);
+                            setModalType("cart");
                             setOrderNum(sessionStorage.getItem("orderNum"))
                             {isOpen && <CartMenuPopup  // 여기가 문제
                                 orderNum={orderNum}
@@ -147,7 +151,7 @@ const Main = () => {
             </div>
 
             <Modal style={modalStyle} isOpen={isOpen} onRequestClose={closemodal} ariaHideApp={false}>
-                {isOpen && (orderNum ?
+                {isOpen && (modalType === "cart" ?
                         <CartMenuPopup
                             orderNum={orderNum}
                             closeModal={closemodal}
