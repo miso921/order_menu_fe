@@ -18,15 +18,27 @@ const CurrentMenuPopup = (prop) => {
                 selectInfo.selectedOptions.opt2,
             ].filter(opt => opt !== null);  // null이 아닌 값만 필터링
 
+            // 메인 메뉴에 optionYn: 'N' 추가
+            const mainMenu = {
+                ...selectInfo.selectMenu,
+                optionYn: 'N'
+            };
+
+            // 옵션들에 optionYn: 'Y' 추가
+            const optionsWithFlag = selectedOpts.map(opt => ({
+                ...opt,
+                optionYn: 'Y'
+            }));
+
             // API에 전송할 데이터 구조
             const cartResponse = await axios.post("/api/v1/menu/cart", {
-                ...selectInfo,
-                selectedOptions: selectedOpts, // opt 배열로 변환된 값만 전송
+                selectMenu: mainMenu,
+                selectedOptions: optionsWithFlag,
                 orderNum: sessionStorage.getItem("orderNum") ? sessionStorage.getItem("orderNum") : null
             });
 
-            sessionStorage.setItem("orderNum", cartResponse.data.data.orderNum)
-            console.log(cartResponse)
+            sessionStorage.setItem("orderNum", cartResponse.data.data.orderNum);
+            console.log(cartResponse);
             prop.closeModal();
         } catch (e) {
             console.warn(e);
@@ -101,7 +113,7 @@ const CurrentMenuPopup = (prop) => {
                         className={`rounded-lg shadow-md overflow-hidden cursor-pointer w-full p-4 text-left 
                             ${isOptionSelected(item) ? "bg-amber-800" : "bg-orange-400"} 
                             hover:shadow-lg`}
-                        onClick={() => toggleOption(item)} // 클릭 시 toggleOption 실행
+                        onClick={() => toggleOption(item)}
                     >
                         <h3 className="text-xl font-bold">{item.name}</h3>
                         <p className="text-gray-700">{item.price} 원</p>

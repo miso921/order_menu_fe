@@ -71,10 +71,6 @@ const Main = () => {
         return relatedOptions;
     };
 
-    useEffect(() => {
-        console.log(cartItems)
-    }, [cartItems])
-
     return (
         <>
             <div className="container">
@@ -149,15 +145,6 @@ const Main = () => {
                     </button>
                 </div>
             </div>
-
-            <Modal style={modalStyle} isOpen={isOpen} onRequestClose={closemodal} ariaHideApp={false}>
-                {isOpen && <CurrentMenuPopup
-                    currentMenuOption={currentMenuOption}
-                    relatedOptions={relatedOptions}
-                    closeModal={closemodal}
-                    cart={setCartItems}
-                />}
-            </Modal>
 
             <Modal style={modalStyle} isOpen={isOpen} onRequestClose={closemodal} ariaHideApp={false}>
                 {isOpen && (orderNum ?
