@@ -9,5 +9,8 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [
+        // eslint-disable-next-line no-undef
+        require("tailwind-scrollbar-hide"), // 추가된 플러그인
+    ],
 };

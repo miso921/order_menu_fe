@@ -9,7 +9,7 @@ const menuOption = [
     seq: 2,
     code: "ICE_OPT",
     name: "시원하게",
-    price: "0",
+    price: "500",
   },
   {
     seq: 3,
@@ -21,7 +21,7 @@ const menuOption = [
     seq: 4,
     code: "THICK",
     name: "진하게",
-    price: "0",
+    price: "500",
   },
 ];
 
