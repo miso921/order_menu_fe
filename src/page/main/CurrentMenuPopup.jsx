@@ -5,8 +5,8 @@ const CurrentMenuPopup = (prop) => {
     const [selectInfo, setSelectInfo] = useState({
         selectMenu: null,
         selectedOptions: {
-            opt1: null, // 1, 2 그룹 선택 상태
-            opt2: null, // 3, 4 그룹 선택 상태
+            opt1: null,
+            opt2: null,
         },
     });
 
@@ -20,22 +20,25 @@ const CurrentMenuPopup = (prop) => {
 
             // 메인 메뉴에 optionYn: 'N' 추가
             const mainMenu = {
-                ...selectInfo.selectMenu,
+                ...prop.currentMenuOption, // selectInfo.selectMenu 대신 prop.currentMenuOption 사용
                 optionYn: 'N'
             };
 
-            // 옵션들에 optionYn: 'Y' 추가
-            const optionsWithFlag = selectedOpts.map(opt => ({
-                ...opt,
-                optionYn: 'Y'
-            }));
-
-            // API에 전송할 데이터 구조
-            const cartResponse = await axios.post("/api/v1/menu/cart", {
+            // API 요청 데이터 구조화
+            const requestData = {
                 selectMenu: mainMenu,
-                selectedOptions: optionsWithFlag,
-                orderNum: sessionStorage.getItem("orderNum") ? sessionStorage.getItem("orderNum") : null
-            });
+                orderNum: sessionStorage.getItem("orderNum") || null
+            };
+
+            // 선택된 옵션이 있는 경우에만 selectedOptions 포함
+            if (selectedOpts.length > 0) {
+                requestData.selectedOptions = selectedOpts.map(opt => ({
+                    ...opt,
+                    optionYn: 'Y'
+                }));
+            }
+
+            const cartResponse = await axios.post("/api/v1/menu/cart", requestData);
 
             sessionStorage.setItem("orderNum", cartResponse.data.data.orderNum);
             console.log(cartResponse);
@@ -47,7 +50,6 @@ const CurrentMenuPopup = (prop) => {
 
     const toggleOption = (item) => {
         setSelectInfo((prevState) => {
-            // 그룹 판단: 1, 2는 opt1, 3, 4는 opt2
             const isOpt1 = item.seq === 1 || item.seq === 2;
             const isOpt2 = item.seq === 3 || item.seq === 4;
 
@@ -58,13 +60,13 @@ const CurrentMenuPopup = (prop) => {
                     ...prevState.selectedOptions,
                     opt1: isOpt1
                         ? prevState.selectedOptions.opt1?.seq === item.seq
-                            ? null // 동일한 옵션 클릭 시 해제 (toggle)
-                            : item // 새로 선택
+                            ? null
+                            : item
                         : prevState.selectedOptions.opt1,
                     opt2: isOpt2
                         ? prevState.selectedOptions.opt2?.seq === item.seq
-                            ? null // 동일한 옵션 클릭 시 해제 (toggle)
-                            : item // 새로 선택
+                            ? null
+                            : item
                         : prevState.selectedOptions.opt2,
                 },
             };
@@ -121,7 +123,7 @@ const CurrentMenuPopup = (prop) => {
                 ))}
             </div>
 
-            {/* 장바구니 */}
+            {/* 담기 */}
             <div className={"flex justify-end pr-12"}>
                 <button className={"w-24 h-12 bg-red-900"} onClick={saveCart}>담기</button>
             </div>

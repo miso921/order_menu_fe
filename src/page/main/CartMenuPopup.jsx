@@ -142,16 +142,16 @@ const CartMenuPopup = (prop) => {
                     {groupedItems.map((group, index) => (
                         <>
                             <tr key={group.mainMenu.cartSeq} className="border-b">
-                                <td className="p-2">{index + 1}</td>
+                                <td className="p-2 text-black">{index + 1}</td>
                                 <td className="p-2">
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2 text-black">
                                         {group.mainMenu.name}
                                     </div>
                                 </td>
-                                <td className="p-2">
+                                <td className="p-2 text-black">
                                     {group.options.map(opt => opt.name).join(', ')}
                                 </td>
-                                <td className="p-2 text-right">
+                                <td className="p-2 text-right text-black">
                                     {group.mainMenu.price.toLocaleString()}원
                                 </td>
                                 <td className="p-2">
