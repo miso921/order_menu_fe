@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import axios from "axios";
 import PortOne from "@portone/browser-sdk/v2";
+import { Fragment } from 'react';  // 이 줄 추가
 
 const CartMenuPopup = (prop) => {
     const [cartItems, setCartItems] = useState(null);
@@ -143,7 +144,7 @@ const CartMenuPopup = (prop) => {
                     </thead>
                     <tbody>
                     {groupedItems.map((group, index) => (
-                        <>
+                        <Fragment key={group.mainMenu.cartSeq}>
                             <tr key={group.mainMenu.cartSeq} className="border-b">
                                 <td className="p-2 text-black">{index + 1}</td>
                                 <td className="p-2">
@@ -174,7 +175,7 @@ const CartMenuPopup = (prop) => {
                                     <td className="p-2"></td>
                                 </tr>
                             ))}
-                        </>
+                        </Fragment>
                     ))}
                     <tr className="font-bold">
                         <td className="p-2 text-black" colSpan={3}>총 금액</td>
