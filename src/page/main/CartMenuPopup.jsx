@@ -11,6 +11,19 @@ const CartMenuPopup = (prop) => {
         status: "IDLE"
     });
 
+    const [showOrderNumber, setShowOrderNumber] = useState(false);  // 주문번호 모달 상태 추가
+
+    // 모달 종료와 세션스토리지 초기화를 위한 함수
+    const handleFinalClose = () => {
+        prop.closeModal();  // 메인 모달 닫기
+        setShowOrderNumber(false);  // 주문번호 모달 닫기
+        sessionStorage.removeItem('orderNum');  // 세션스토리지 초기화
+    };
+
+    const getRandomInt = function (min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    };
+
     const getCartList = async () => {
         const orderNum = prop.orderNum;
         try {
@@ -69,7 +82,7 @@ const CartMenuPopup = (prop) => {
     };
 
     const handlePayment = async () => {
-        setPaymentStatus({ status: "PENDING" });
+        setPaymentStatus({status: "PENDING"});
         const totalAmount = Math.floor(cartItems.totalCost)
         const paymentId = [...crypto.getRandomValues(new Uint32Array(2))]
             .map((word) => word.toString(16).padStart(8, "0"))
@@ -84,21 +97,38 @@ const CartMenuPopup = (prop) => {
                 totalAmount,
                 currency: "CURRENCY_KRW",
                 payMethod: 'EASY_PAY',
-                easyPay: { easyPayProvider: 'EASY_PAY_PROVIDER_KAKAOPAY' },
-                bypass: { kakaopay: { custom_message: groupedItems[0]?.mainMenu?.name } },
+                easyPay: {
+                    provider: 'KAKAOPAY'  // V2에서는 EASY_PAY_PROVIDER_ 접두어 제거
+                },
+                customer: {
+                    id: "GUEST",
+                    name: "고객",
+                },
+                bypass: {
+                    kakaopay: {
+                        custom_message: groupedItems[0]?.mainMenu?.name
+                    }
+                },
                 orderData: {
                     orderNumber: prop.orderNum
                 }
             });
+
+            if (!payment) {
+                throw new Error("결제 응답이 없습니다.");
+            }
             // 결제 상태 확인 및 처리
-            if (payment.status === "DONE") {
-                setPaymentStatus({ status: "PAID" });
-                // 결제 성공 후 서버에 결제 완료 정보 전송
-                await axios.post('/api/v1/payment/complete', {
-                    orderId: prop.orderNum,
-                    paymentId: payment.paymentId,
-                    amount: payment.amount
+            console.log("payment.status", payment)
+
+            if (payment.transactionType === "PAYMENT") {
+                setPaymentStatus({status: "PAID"});
+                setPaymentStatus({
+                    status: "SUCCESS",
+                    message: "결제가 완료 되었습니다."
                 });
+                setShowOrderNumber(true);  // 주문번호 모달 표시
+                // 3초 후 모든 모달 닫기 및 초기화
+                setTimeout(handleFinalClose, 3000);
             } else {
                 throw new Error(payment.message || "결제가 완료되지 않았습니다.");
             }
@@ -121,8 +151,6 @@ const CartMenuPopup = (prop) => {
     }, []);
 
     if (!cartItems) return null;
-
-    const isWaitingPayment = paymentStatus.status !== "IDLE";
 
     return (
         <>
@@ -205,7 +233,7 @@ const CartMenuPopup = (prop) => {
                         <p className="mb-4">{paymentStatus.message}</p>
                         <button
                             className="px-4 py-2 bg-gray-500 text-white rounded"
-                            onClick={() => setPaymentStatus({ status: "IDLE" })}
+                            onClick={() => setPaymentStatus({status: "IDLE"})}
                         >
                             닫기
                         </button>
@@ -223,6 +251,20 @@ const CartMenuPopup = (prop) => {
                             닫기
                         </button>
                     </dialog>
+                )}
+
+                {/* 주문번호 모달 추가 */}
+                {showOrderNumber && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                        <div className="bg-white p-8 rounded-lg shadow-xl text-center">
+                            <p className="text-4xl font-bold text-orange-600 mb-4">
+                                주문번호 : {getRandomInt(1, 30)}
+                            </p>
+                            <p className="text-gray-600">
+                                잠시 후 자동으로 창이 닫힙니다.
+                            </p>
+                        </div>
+                    </div>
                 )}
             </div>
         </>
