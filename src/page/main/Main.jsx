@@ -62,6 +62,17 @@ const Main = () => {
         setIsOpen(false);
     };
 
+    const handleCartButtonClick = () => {
+        const orderNum = sessionStorage.getItem("orderNum");
+        if (!orderNum) {
+            alert("장바구니에 담긴 것이 없습니다.");
+            return;
+        }
+        setOrderNum(orderNum);
+        setIsOpen(true);
+        setModalType("cart");
+    };
+
     // 현재 선택한 메뉴 토글
     const currentMenu = selectedMenu === "drink" ? drinkMenu : dessertMenu;
 
@@ -136,9 +147,13 @@ const Main = () => {
                     <button
                         className={`flex items-center mr-3 px-[1.6rem] py-2 rounded-lg shadow-xl hover:bg-amber-800`}
                         onClick={() => {
-                            setIsOpen(!isOpen);
-                            setModalType("cart");
-                            setOrderNum(sessionStorage.getItem("orderNum"));
+                            handleCartButtonClick();
+
+                            if(orderNum) {
+                                setIsOpen(!isOpen);
+                                setModalType("cart");
+                                setOrderNum(sessionStorage.getItem("orderNum"));
+                            }
                             {
                                 isOpen && <CartMenuPopup
                                     orderNum={orderNum}

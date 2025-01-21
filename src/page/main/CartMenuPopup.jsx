@@ -187,7 +187,7 @@ const CartMenuPopup = (prop) => {
                 <div className="flex justify-between gap-2">
                     <div>
                         <button
-                            className="px-10 py-2 bg-red-900 rounded hover:bg-gray-300"
+                            className="px-10 py-2 bg-orange-600 text-white rounded hover:bg-neutral-600"
                             onClick={handlePayment}
                             disabled={isWaitingPayment}
                         >

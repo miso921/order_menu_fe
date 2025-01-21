@@ -124,9 +124,10 @@ const CurrentMenuPopup = (prop) => {
             </div>
 
             <div className="flex justify-between items-center mt-4 px-12">
+
                 {/* 장바구니 버튼 */}
                 <button
-                    className="px-7 py-3 bg-red-900 text-white rounded hover:bg-gray-300"
+                    className="px-7 py-3 bg-orange-600 text-white rounded hover:bg-neutral-600"
                     onClick={saveCart}
                 >
                     장바구니
@@ -139,6 +140,8 @@ const CurrentMenuPopup = (prop) => {
                 >
                     닫기
                 </button>
+
+
             </div>
 
         </div>
