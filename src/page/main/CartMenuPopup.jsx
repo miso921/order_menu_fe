@@ -56,9 +56,12 @@ const CartMenuPopup = (prop) => {
         setGroupedItems(groups);
     };
 
-    const handleDelete = async (seq) => {
+    const handleDelete = async (mainSeq, option) => {
+        const optionSeq = option.map(opt => opt.cartSeq);
+        const seqParam = [mainSeq, ...optionSeq];
+        console.log(seqParam)
         try {
-            await axios.delete(`/api/v1/menu/cart/${seq}`);
+            await axios.put(`/api/v1/menu/cart-list`, {seqParam});
             getCartList();
         } catch (e) {
             console.warn(e);
@@ -156,7 +159,7 @@ const CartMenuPopup = (prop) => {
                                 </td>
                                 <td className="p-2">
                                     <button
-                                        onClick={() => handleDelete(group.mainMenu.cartSeq)}
+                                        onClick={() => handleDelete(group.mainMenu.cartSeq, group.options)}
                                         className="p-1 hover:bg-black rounded-full"
                                     >
                                         <X className="w-4 h-4 text-gray-500"/>

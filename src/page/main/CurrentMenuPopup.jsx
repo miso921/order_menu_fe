@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 
 const CurrentMenuPopup = (prop) => {
@@ -123,10 +123,24 @@ const CurrentMenuPopup = (prop) => {
                 ))}
             </div>
 
-            {/* 담기 */}
-            <div className={"flex justify-end pr-12"}>
-                <button className={"w-24 h-12 bg-red-900"} onClick={saveCart}>담기</button>
+            <div className="flex justify-between items-center mt-4 px-12">
+                {/* 장바구니 버튼 */}
+                <button
+                    className="px-7 py-3 bg-red-900 text-white rounded hover:bg-gray-300"
+                    onClick={saveCart}
+                >
+                    장바구니
+                </button>
+
+                {/* 닫기 버튼 */}
+                <button
+                    className="px-10 py-3 bg-red-900 text-white rounded hover:bg-gray-300"
+                    onClick={prop.closeModal}
+                >
+                    닫기
+                </button>
             </div>
+
         </div>
     );
 };

@@ -14,7 +14,7 @@ const Main = () => {
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const [modalType , setModalType] = useState("");
+    const [modalType, setModalType] = useState("");
 
     const [currentMenuOption, setCurrentMenuOption] = useState({
         seq: 0,
@@ -132,22 +132,26 @@ const Main = () => {
                         ))}
                 </div>
 
-                <div className="space-y-4 p-5">
+                <div className="space-y-4 p-2 flex justify-end">
                     <button
-                        className={`mr-3 px-4 py-2 rounded-lg shadow-xl hover:bg-amber-800`}
+                        className={`flex items-center mr-3 px-[1.6rem] py-2 rounded-lg shadow-xl hover:bg-amber-800`}
                         onClick={() => {
                             setIsOpen(!isOpen);
                             setModalType("cart");
-                            setOrderNum(sessionStorage.getItem("orderNum"))
-                            {isOpen && <CartMenuPopup  // 여기가 문제
-                                orderNum={orderNum}
-                                closeModal={closemodal}
-                            />}
+                            setOrderNum(sessionStorage.getItem("orderNum"));
+                            {
+                                isOpen && <CartMenuPopup
+                                    orderNum={orderNum}
+                                    closeModal={closemodal}
+                                />;
+                            }
                         }}
                     >
-                        장바구니
+                        <img className="w-7 h-7 mr-2" src="/cart-shopping-solid.svg" alt="cart"/>
+                        <span>장바구니</span>
                     </button>
                 </div>
+
             </div>
 
             <Modal style={modalStyle} isOpen={isOpen} onRequestClose={closemodal} ariaHideApp={false}>

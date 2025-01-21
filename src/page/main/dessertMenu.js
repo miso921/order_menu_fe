@@ -5,6 +5,7 @@ const dessertMenu = [
     name: "요거트롤",
     url: "/menuImages/yogurtroll.jpg",
     price: 3500,
+    optSeq : []
   },
   {
     seq: 2,
@@ -12,6 +13,7 @@ const dessertMenu = [
     name: "반하나 푸딩",
     url: "/menuImages/bananapudding.jpg",
     price: 6000,
+    optSeq : []
   },
   {
     seq: 3,
@@ -19,6 +21,7 @@ const dessertMenu = [
     name: "명란바게트",
     url: "/menuImages/baguette.jpg",
     price: 4500,
+    optSeq : []
   },
   {
     seq: 4,
@@ -26,6 +29,7 @@ const dessertMenu = [
     name: "부추빵",
     url: "/menuImages/buchubread.jpg",
     price: 2000,
+    optSeq : []
   },
   {
     seq: 5,
@@ -33,6 +37,7 @@ const dessertMenu = [
     name: "야끼소바빵",
     url: "/menuImages/yakisobabread.jpg",
     price: 4000,
+    optSeq : []
   },
   {
     seq: 6,
@@ -40,6 +45,7 @@ const dessertMenu = [
     name: "작은 메아리",
     url: "/menuImages/smallecho.jpg",
     price: 3000,
+    optSeq : []
   },
   {
     seq: 7,
@@ -47,6 +53,7 @@ const dessertMenu = [
     name: "티라미수",
     url: "/menuImages/tiramisu.jpg",
     price: 5500,
+    optSeq : []
   },
 ];
 
